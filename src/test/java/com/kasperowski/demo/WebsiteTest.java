@@ -8,6 +8,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -73,6 +75,34 @@ public class WebsiteTest {
         // Visitor clicks Submit
         // TODO In the web service, improve the name of the submit button.
         WebElement submit = driver.findElement(By.id("gform_submit_button_1"));
+        submit.click();
+
+        // assert that we got the submit result
+        assertThat(driver.getPageSource(), containsString("Thank you for contacting me!"));
+
+        // ... and a full end-to-end test would check that the email got sent.
+    }
+
+    @Test
+    public void findElementByCssSelector() {
+        // Wait up to 5 seconds for the page to load before attempting to find elements.
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+
+        driver.navigate().to("https://kasperowski.com/contact-me");
+
+        // To find the CSS selector string for an existing web page, in Chrome, click View/Developer/Inspect Elements.
+        // Click on the element you care about. In the inspector window, right-click the highlighted text and
+        // select Copy/Copy Selector. Paste that string into your cssSelector method.
+        WebElement name = driver.findElement(By.cssSelector("#input_1_1"));
+        name.sendKeys("My Name");
+
+        WebElement email = driver.findElement(By.cssSelector("#input_1_2"));
+        email.sendKeys("myname@example.com");
+
+        WebElement message = driver.findElement(By.cssSelector("#input_1_3"));
+        message.sendKeys("myname@example.com");
+
+        WebElement submit = driver.findElement(By.cssSelector("#gform_submit_button_1"));
         submit.click();
 
         // assert that we got the submit result
